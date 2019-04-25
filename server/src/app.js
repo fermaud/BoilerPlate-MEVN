@@ -9,29 +9,33 @@ app.use(bodyParser.json())
 app.use(cors())
 
 const mongodb_conn_module = require('./mongodbConnModule');
-var db = mongodb_conn_module.connect();
+const db = mongodb_conn_module.connect();
 
-var Post = require("../models/post");
+const User = require("../models/user");
 
-app.get('/posts', (req, res) => {
-    Post.find({}, 'title description', function (error, posts) {
+app.get('/users', (req, res) => {
+    User.find({}, 'name surname mail admin', function (error, users) {
         if (error) { console.error(error); }
         res.send({
-            posts: posts
+            users: users
         })
     }).sort({_id:-1})
 })
 
-app.post('/add_post', (req, res) => {
-    var db = req.db;
-    var title = req.body.title;
-    var description = req.body.description;
-    var new_post = new Post({
-        title: title,
-        description: description
-    })
+app.post('/add_user', (req, res) => {
+    const db = req.db;
+    const admin = req.body.admin;
+    const name = req.body.name;
+    const surname = req.body.surname;
+    const mail = req.body.mail;
+    const new_user = new User({
+        name: name,
+        surname: surname,
+        mail: mail,
+        admin: admin
+    });
 
-    new_post.save(function (error) {
+    new_user.save(function (error) {
         if (error) {
             console.log(error)
         }
@@ -41,28 +45,30 @@ app.post('/add_post', (req, res) => {
     })
 })
 
-app.put('/posts/:id', (req, res) => {
-    var db = req.db;
-    Post.findById(req.params.id, 'title description', function (error, post) {
+app.put('/users/:id', (req, res) => {
+    const db = req.db;
+    User.findById(req.params.id, 'name surname mail admin', function (error, user) {
         if (error) { console.error(error); }
-        post.title = req.body.title
-        post.description = req.body.description
-        post.save(function (error) {
+        user.admin = req.body.admin;
+        user.name = req.body.name;
+        user.surname = req.body.surname;
+        user.mail = req.body.mail;
+        user.save(function (error) {
             if (error) {
                 console.log(error)
             }
             res.send({
                 success: true
-            })
+            });
         })
     })
 })
 
-app.delete('/posts/:id', (req, res) => {
-    var db = req.db;
-    Post.remove({
+app.delete('/users/:id', (req, res) => {
+    const db = req.db;
+    User.remove({
         _id: req.params.id
-    }, function(err, post){
+    }, function(err, user){
         if (err)
             res.send(err)
         res.send({
@@ -71,11 +77,11 @@ app.delete('/posts/:id', (req, res) => {
     })
 })
 
-app.get('/post/:id', (req, res) => {
-    var db = req.db;
-    Post.findById(req.params.id, 'title description', function (error, post) {
+app.get('/user/:id', (req, res) => {
+    const db = req.db;
+    User.findById(req.params.id, 'name surname mail admin', function (error, user) {
         if (error) { console.error(error); }
-        res.send(post)
+        res.send(user)
     })
 })
 

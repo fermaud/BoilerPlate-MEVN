@@ -1,52 +1,58 @@
 <template>
-    <div class="posts">
-        <h1>Posts</h1>
-        <div v-if="posts.length > 0" class="table-wrap">
+    <div class="users">
+        <h1>Utilisateurs</h1>
+        <div v-if="users.length > 0" class="table-wrap">
             <div>
-                <router-link v-bind:to="{ name: 'addpost' }" class="">Add Post</router-link>
+                <router-link v-bind:to="{ name: 'adduser' }" class="">Ajouter un utilisateur</router-link>
             </div>
             <table>
                 <tr>
-                    <td>Title</td>
-                    <td width="550">Description</td>
-                    <td width="100" align="center">Action</td>
+                    <td width="150">Nom</td>
+                    <td width="100">Prénom</td>
+                    <td width="100">Rôle</td>
+                    <td width="250">Mail</td>
+                    <td width="200" align="center">Action</td>
                 </tr>
-                <tr v-for="post in posts">
-                    <td>{{ post.title }}</td>
-                    <td>{{ post.description }}</td>
+                <tr v-for="user in users">
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.surname }}</td>
+                    <td v-if='user.admin'>Admin</td>
+                    <td v-else>Utilisateur</td>
+
+                    <td>{{ user.mail }}</td>
                     <td align="center">
-                        <router-link v-bind:to="{ name: 'editpost', params: { id: post._id } }">Edit</router-link> |
-                        <a href="#" @click="deletePost(post._id)">Delete</a>
+                        <router-link v-bind:to="{ name: 'edituser', params: { id: user._id } }">Modifier</router-link> |
+                        <a href="#" @click="deleteUser(user._id)">Supprimer</a>
                     </td>
                 </tr>
             </table>
         </div>
         <div v-else>
-            There are no posts.. Lets add one now <br /><br />
-            <router-link v-bind:to="{ name: 'addpost' }" class="add_post_link">Add Post</router-link>
+            There are no user. Lets add one now <br /><br />
+            <router-link v-bind:to="{ name: 'adduser' }" class="add_user_link">Add User</router-link>
         </div>
     </div>
 </template>
 
 <script>
-import PostsService from '@/services/PostsService';
+import UsersService from '@/services/UsersService';
 
 export default {
-    name: 'posts',
+    name: 'users',
     data () {
         return {
-            posts: []
+            users: []
         };
     },
     mounted () {
-        this.getPosts();
+        this.getUsers();
     },
     methods: {
-        async getPosts () {
-            const response = await PostsService.fetchPosts();
-            this.posts = response.data.posts;
+        async getUsers () {
+            const response = await UsersService.fetchUsers();
+            this.users = response.data.users;
         },
-        async deletePost (id) {
+        async deleteUser (id) {
             const $this = this;
             $this.$swal({
                 title: 'Are you sure?',
@@ -57,7 +63,7 @@ export default {
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, delete it!'
             }).then(function () {
-                PostsService.deletePost(id);
+                UsersService.deleteUser(id);
                 $this.$router.go({
                     path: '/'
                 });
@@ -94,7 +100,7 @@ a {
     color: #4d7ef7;
     text-decoration: none;
 }
-a.add_post_link {
+a.add_user_link {
     background: #4d7ef7;
     color: #fff;
     padding: 10px 80px;
