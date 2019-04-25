@@ -19,3 +19,21 @@ npm start
 ```
 
 5. Open `http://localhost:8080` in browser
+
+## Setup Setup MongoDB
+
+1. Start MongoDB
+```
+mongod
+```
+
+2. Open MongoDB Console
+```
+mongo
+```
+
+3. Some Utils Commands
+```
+show databases
+use <db>
+```
