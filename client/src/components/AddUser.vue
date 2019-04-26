@@ -42,7 +42,7 @@ export default {
                 mail: this.mail,
                 admin: this.admin
             });
-            this.$swal('Great!', `Your user has been added!`, 'success');
+            this.$swal('Enregistré !', 'L\'utilisateur ' + this.mail + ' à été ajouté !', 'success');
             this.$router.push({ name: 'users' });
         }
     }

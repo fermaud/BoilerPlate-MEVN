@@ -28,8 +28,8 @@
             </table>
         </div>
         <div v-else>
-            There are no user. Lets add one now <br /><br />
-            <router-link v-bind:to="{ name: 'adduser' }" class="add_user_link">Add User</router-link>
+            Aucun utilisateur pour le moment...<br /><br />
+            <router-link v-bind:to="{ name: 'adduser' }" class="add_user_link">Ajouter un utilisateur</router-link>
         </div>
     </div>
 </template>
@@ -55,13 +55,13 @@ export default {
         async deleteUser (id) {
             const $this = this;
             $this.$swal({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'Êtes-vous sûr ?',
+                text: 'Vous ne pourrez pas revenir en arrère',
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Oui, supprimer !'
             }).then(function () {
                 UsersService.deleteUser(id);
                 $this.$router.go({
